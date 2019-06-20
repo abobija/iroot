@@ -1,0 +1,25 @@
+{
+  "name": "iot-srv",
+  "version": "1.0.0",
+  "description": "Server for IoT devices",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/abobija/iot-srv.git"
+  },
+  "keywords": [
+    "nodejs",
+    "iot",
+    "server",
+    "websocket"
+  ],
+  "author": "Alija Bobija",
+  "license": "MIT",
+  "bugs": {
+    "url": "https://github.com/abobija/iot-srv/issues"
+  },
+  "homepage": "https://github.com/abobija/iot-srv#readme"
+}
