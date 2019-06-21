@@ -1,22 +1,15 @@
 const express = require('express')
 const app = express()
 const server = require('http').createServer(app)
-const WebSocket = require('ws')
-
-const wss = new WebSocket.Server({ server: server });
-
-wss.on('connection', ws => {
-    console.log('ws client connected');
-
-    ws.on('message', msg => {
-        console.log('received from ws client: ', msg);
-        ws.send(msg);
-    });
-});
+const wss = require('./wss')(server);
 
 var api = express.Router()
 
 api.get('/dev', (req, res) => {
+    wss.clients.forEach(client => {
+        console.log(client.readyState);
+    });
+
     res.json({ count: wss.clients.size  });
 })
 
