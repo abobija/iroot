@@ -1,2 +1,2 @@
-# iot-srv
+# iot-base
 Server for IoT devices
