@@ -1,4 +1,5 @@
 const ws = require('ws')
+const uuidv4 = require('uuid/v4')
 
 const lifetimeThreshold = 10 // sec
 
@@ -8,8 +9,10 @@ class Broker {
         this.wss = new ws.Server({ server })
         
         this.wss.on('connection', ws => {
-            console.log('ws client connected', ws)
-            
+            ws.uuid = uuidv4()
+
+            console.log('ws', ws.uuid, 'connected')
+
             ws.refreshLifetime = () => ws.lifetime = lifetimeThreshold
             ws.isAlive = () => ws.lifetime >= 0
 
@@ -20,7 +23,7 @@ class Broker {
             ws.on('message', msg => {
                 ws.refreshLifetime()
 
-                console.log('received from ws client: ', msg)
+                console.log('received from ws', ws.uuid, ':', msg)
                 ws.send(msg)
             })
         })
@@ -32,7 +35,7 @@ class Broker {
                 ws.lifetime--
 
                 if(! ws.isAlive()) {
-                    console.log('ws client disconnected')
+                    console.log('ws', ws.uuid, 'disconnected')
                     return ws.terminate()
                 }
                 
