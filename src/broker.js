@@ -7,8 +7,10 @@ class Broker {
     constructor(server) {
         let self = this
         this.wss = new ws.Server({ server })
-        
-        this.wss.on('connection', ws => {
+
+        this.wss.on('connection', (ws, req) => {
+            //console.log(req.headers)
+            
             ws.uuid = uuidv4()
 
             console.log('ws', ws.uuid, 'connected')
