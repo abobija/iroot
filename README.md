@@ -1,2 +1,2 @@
-# iot-base
+# iroot
 Server for IoT devices
