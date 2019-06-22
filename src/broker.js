@@ -5,35 +5,48 @@ const lifetimeThreshold = 10 // sec
 
 class Broker {
     constructor(server) {
-        let self = this
         this.wss = new ws.Server({ server })
+        this.wss.on('connection', (ws, req) => this.onConnection(ws, req))
+        this.heartbeat()
+    }
 
-        this.wss.on('connection', (ws, req) => {
-            //console.log(req.headers)
-            
-            ws.uuid = uuidv4()
+    onConnection(ws, req) {
+        if(! this.wsIsAuthorized(req)) {
+            console.log("ws not authorized")
+            return ws.terminate()
+        }
 
-            console.log('ws', ws.uuid, 'connected')
+        ws.uuid = uuidv4()
 
-            ws.refreshLifetime = () => ws.lifetime = lifetimeThreshold
-            ws.isAlive = () => ws.lifetime >= 0
+        console.log('ws', ws.uuid, 'connected')
+        console.log('connected clients', this.wss.clients.size)
 
+        ws.refreshLifetime = () => ws.lifetime = lifetimeThreshold
+        ws.isAlive = () => ws.lifetime >= 0
+
+        ws.refreshLifetime()
+
+        ws.on('pong', ws.refreshLifetime)
+
+        ws.on('message', msg => {
             ws.refreshLifetime()
 
-            ws.on('pong', ws.refreshLifetime)
-
-            ws.on('message', msg => {
-                ws.refreshLifetime()
-
-                console.log('received from ws', ws.uuid, ':', msg)
-                ws.send(msg)
-            })
+            console.log('received from ws', ws.uuid, ':', msg)
+            ws.send(msg)
         })
+    }
 
+    wsIsAuthorized(req) {
+        //console.log(req.headers)
+        return true
+    }
+
+    heartbeat() {
         let lifeTimePingSendSecond = Math.ceil(lifetimeThreshold / 3)
+        let wss = this.wss
 
         setInterval(() => {
-            self.wss.clients.forEach(ws => {
+            wss.clients.forEach(ws => {
                 ws.lifetime--
 
                 if(! ws.isAlive()) {
