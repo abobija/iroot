@@ -1,5 +1,6 @@
 const ws = require('ws')
 const uuidv4 = require('uuid/v4')
+const basicAuth = require('basic-auth')
 
 const lifetimeThreshold = 10 // sec
 
@@ -37,8 +38,14 @@ class Broker {
     }
 
     wsIsAuthorized(req) {
-        //console.log(req.headers)
-        return true
+        let user = basicAuth(req)
+        
+        if(user != null) {
+            console.log(user)
+            return true
+        }
+
+        return false
     }
 
     heartbeat() {
