@@ -39,12 +39,14 @@ class Broker {
 
     wsIsAuthorized(req) {
         let user = basicAuth(req)
-        
-        if(user != null) {
-            console.log(user)
-            return true
-        }
 
+        if(user != null) {
+            // TODO: Fetch user from db
+            if(user.name === 'dev32' && user.pass === 'test1234') {
+                return true
+            }
+        }
+        
         return false
     }
 
