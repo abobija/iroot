@@ -24,6 +24,8 @@ export default class Channel {
     unsubscribe(subscriber: Subscriber): Channel {
         this.subscribers = this.subscribers.filter(s => s !== subscriber)
         
+        subscriber.emit('unsubscribed', this)
+
         return this
     }
 }
