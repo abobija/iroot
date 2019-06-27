@@ -4,7 +4,7 @@ const basicAuth = require('basic-auth')
 const lifetimeThreshold = 10 // sec
 const lifeTimePingSendSecond = Math.ceil(lifetimeThreshold / 3)
 
-let clientClass = class Client {
+let clazz = class Subscriber {
     constructor(broker, ws) {
         let self = this
         this.broker = broker
@@ -17,11 +17,11 @@ let clientClass = class Client {
         ws.on('message', msg => {
             self.refreshLifetime()
 
-            console.log('received from client', self.uuid, ':', msg)
+            console.log('received from subscriber', self.uuid, ':', msg)
             //ws.send(msg)
         })
 
-        console.log('client', this.uuid, 'connected')
+        console.log('subscriber', this.uuid, 'connected')
     }
 
     refreshLifetime() {
@@ -46,8 +46,8 @@ let clientClass = class Client {
     }
 
     dismiss() {
-        console.log('client', this.uuid, 'disconnected')
-        this.broker.clients.delete(this)
+        console.log('subscriber', this.uuid, 'disconnected')
+        this.broker.subscribers.delete(this)
         return this.ws.terminate()
     }
 
@@ -64,4 +64,4 @@ let clientClass = class Client {
     }
 }
 
-module.exports = clientClass
+module.exports = clazz

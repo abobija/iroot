@@ -1,8 +1,8 @@
 const ws = require('ws')
-const Client = require('./client')
+const Subscriber = require('./subscriber')
 
 class Broker {
-    clients = new Set()
+    subscribers = new Set()
 
     constructor(server) {
         this.wss = new ws.Server({ server })
@@ -11,19 +11,19 @@ class Broker {
     }
 
     onConnection(ws, req) {
-        let client = new Client(this, ws)
-        this.clients.add(client)
+        let subscriber = new Subscriber(this, ws)
+        this.subscribers.add(subscriber)
 
-        if(! client.isAuthorized(req)) {
-            console.log("client not authorized")
-            /*return*/ client.dismiss()
+        if(! subscriber.isAuthorized(req)) {
+            console.log("subscriber not authorized")
+            /*return*/ subscriber.dismiss()
         }
 
-        console.log('connected clients', this.clients.size)
+        console.log('connected subscriber', this.subscribers.size)
     }
 
     heartbeater() {
-        setInterval(() => this.clients.forEach(client => client.heartbeat()), 1000)
+        setInterval(() => this.subscribers.forEach(subscriber => subscriber.heartbeat()), 1000)
     }
 }
 
