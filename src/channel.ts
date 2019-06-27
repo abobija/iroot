@@ -1,4 +1,4 @@
-import Subscriber from "./subscriber";
+import Subscriber from "./subscriber"
 
 export default class Channel {
     path: string
@@ -7,7 +7,7 @@ export default class Channel {
     constructor(path: string) {
         this.path = path
     }
-    
+
     subscribe(subscriber: Subscriber): Channel {
         subscriber.on('dismiss', () => this.unsubscribe(subscriber))
         this.subscribers.push(subscriber)

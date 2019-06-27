@@ -1,8 +1,8 @@
 import Subscriber from './subscriber'
 import WebSocket from 'ws'
 import http from 'http'
-import Channel from './channel';
-import Payload from './payload';
+import Channel from './channel'
+import Payload from './payload'
 
 export default class Broker {
     private wss: WebSocket.Server
