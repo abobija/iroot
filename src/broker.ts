@@ -40,6 +40,10 @@ export default class Broker {
         subscriber.on('subscribed', (channel: Channel) => {
             console.log(`subscriber ${subscriber.uuid} subscribed to channel ${channel.path}`)
         })
+
+        subscriber.on('unsubscribed', (channel: Channel) => {
+            console.log(`subscriber ${subscriber.uuid} unsubscribed from channel ${channel.path}`)
+        })
         
         subscriber.on('dismiss', () => {
             this._subscribers = this._subscribers.filter(s => s !== subscriber)
