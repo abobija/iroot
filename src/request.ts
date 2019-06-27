@@ -1,4 +1,4 @@
-export default class Payload {
+export default class Request {
     action: string 
     channel: string
     data?: string
@@ -13,12 +13,12 @@ export default class Payload {
         return action === 'subscribe' || action === 'publish'
     }
 
-    static parse(plain: string): Payload | null {
+    static parse(plain: string): Request | null {
         try {
             var json = JSON.parse(plain)
             
-            if(Payload.isValidAction(json.action) && typeof(json.channel) === 'string') {
-                return new Payload(json.action, json.channel, json.data)
+            if(Request.isValidAction(json.action) && typeof(json.channel) === 'string') {
+                return new Request(json.action, json.channel, json.data)
             }
         }
         catch(_) {}

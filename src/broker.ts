@@ -2,7 +2,7 @@ import Subscriber from './subscriber'
 import WebSocket from 'ws'
 import http from 'http'
 import Channel from './channel'
-import Payload from './payload'
+import Request from './request'
 
 export default class Broker {
     private wss: WebSocket.Server
@@ -30,9 +30,9 @@ export default class Broker {
 
         this.mainChannel.subscribe(subscriber)
 
-        subscriber.on('payload', (pl: Payload) => {
-            console.log(`payload from subscriber ${subscriber.uuid}`)
-            console.log(pl)
+        subscriber.on('request', (req: Request) => {
+            console.log(`request from subscriber ${subscriber.uuid}`)
+            console.log(req)
         })
 
         subscriber.on('dismiss', () => {
