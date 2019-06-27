@@ -4,7 +4,7 @@ const basicAuth = require('basic-auth')
 const lifetimeThreshold = 10 // sec
 const lifeTimePingSendSecond = Math.ceil(lifetimeThreshold / 3)
 
-module.exports = class Subscriber {
+module.exports = class {
     constructor(broker, ws) {
         let self = this
         this.broker = broker
