@@ -1,11 +1,19 @@
-const uuidv4 = require('uuid/v4')
-const basicAuth = require('basic-auth')
+import uuidv4 from 'uuid/v4'
+import basicAuth from 'basic-auth'
+import Broker from './broker'
+import WebSocket from 'ws'
+import http from 'http'
 
 const lifetimeThreshold = 10 // sec
 const lifeTimePingSendSecond = Math.ceil(lifetimeThreshold / 3)
 
-module.exports = class {
-    constructor(broker, ws) {
+export default class Subscriber {
+    lifetime: number = 0
+    broker: Broker
+    ws: WebSocket
+    uuid: string
+
+    constructor(broker: Broker, ws: WebSocket) {
         let self = this
         this.broker = broker
         this.ws = ws
@@ -32,7 +40,7 @@ module.exports = class {
         return this.lifetime >= 0
     }
 
-    isAuthorized(req) {
+    isAuthorized(req: http.IncomingMessage) {
         let user = basicAuth(req)
 
         if(user != null) {
@@ -47,7 +55,7 @@ module.exports = class {
 
     dismiss() {
         console.log('subscriber', this.uuid, 'disconnected')
-        this.broker.subscribers.delete(this)
+        this.broker.subscribers = this.broker.subscribers.filter(obj => obj !== this);
         return this.ws.terminate()
     }
 
