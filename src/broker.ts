@@ -2,6 +2,7 @@ import Subscriber from './subscriber'
 import WebSocket from 'ws'
 import http from 'http'
 import Channel from './channel';
+import Message from './message';
 
 export default class Broker {
     private wss: WebSocket.Server
@@ -28,6 +29,10 @@ export default class Broker {
         console.log(`total subscribers ${this._subscribers.length}`)
 
         this.mainChannel.subscribe(subscriber)
+
+        subscriber.on('message', (message: Message) => {
+            console.log(`subscriber ${subscriber.uuid} sends ${message.data} to ${message.channel} channel`)
+        })
 
         subscriber.on('dismiss', () => {
             this._subscribers = this._subscribers.filter(s => s !== subscriber)
