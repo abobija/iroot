@@ -1,6 +1,5 @@
 import uuidv4 from 'uuid/v4'
 import basicAuth from 'basic-auth'
-import Broker from './broker'
 import WebSocket from 'ws'
 import http from 'http'
 import events from 'events'
@@ -31,11 +30,11 @@ export default class Subscriber extends events.EventEmitter {
         })
     }
 
-    refreshLifetime(): void {
+    private refreshLifetime(): void {
         this.lifetime = lifetimeThreshold
     }
 
-    isAlive(): boolean {
+    private isAlive(): boolean {
         return this.lifetime >= 0
     }
 
