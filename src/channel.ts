@@ -9,12 +9,15 @@ export default class Channel {
     }
 
     subscribe(subscriber: Subscriber): Channel {
+        subscriber.on('dismiss', () => this.unsubscribe(subscriber))
         this.subscribers.push(subscriber)
+
         return this
     }
 
     unsubscribe(subscriber: Subscriber): Channel {
         this.subscribers = this.subscribers.filter(s => s !== subscriber)
+        
         return this
     }
 }

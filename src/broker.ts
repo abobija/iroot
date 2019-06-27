@@ -28,7 +28,6 @@ export default class Broker {
 
         subscriber.on('dismiss', () => {
             this._subscribers = this._subscribers.filter(s => s !== subscriber)
-            this.unsubscribeFromAllChannels(subscriber)
 
             console.log(`subscriber ${subscriber.uuid} dismissed`)
             console.log(`total subscribers ${this._subscribers.length}`)
@@ -38,10 +37,6 @@ export default class Broker {
             console.log(`subscriber ${subscriber.uuid} not authorized`)
             subscriber.dismiss()
         }
-    }
-
-    unsubscribeFromAllChannels(subscriber: Subscriber): void {
-        this.channels.forEach(channel => channel.unsubscribe(subscriber))
     }
 
     heartbeats(): void {
