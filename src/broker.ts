@@ -9,10 +9,15 @@ export default class Broker {
     constructor(server: http.Server) {
         this.wss = new WebSocket.Server({ server })
         this.wss.on('connection', (ws, req) => this.onConnection(ws, req))
-        this.heartbeater()
-    }
 
-    onConnection(ws: WebSocket, req: http.IncomingMessage) {
+        // Heartbeats
+        setInterval(() => 
+            this.subscribers.forEach(subscriber => subscriber.heartbeat()),
+            1000
+        )
+    }
+    
+    onConnection(ws: WebSocket, req: http.IncomingMessage): void {
         let subscriber = new Subscriber(this, ws)
         this.subscribers.push(subscriber)
 
@@ -22,9 +27,5 @@ export default class Broker {
         }
 
         console.log('connected subscriber', this.subscribers.length)
-    }
-
-    heartbeater() {
-        setInterval(() => this.subscribers.forEach(subscriber => subscriber.heartbeat()), 1000)
     }
 }

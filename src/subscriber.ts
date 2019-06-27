@@ -32,15 +32,15 @@ export default class Subscriber {
         console.log('subscriber', this.uuid, 'connected')
     }
 
-    refreshLifetime() {
+    refreshLifetime(): void {
         this.lifetime = lifetimeThreshold
     }
 
-    isAlive() {
+    isAlive(): boolean {
         return this.lifetime >= 0
     }
 
-    isAuthorized(req: http.IncomingMessage) {
+    isAuthorized(req: http.IncomingMessage): boolean {
         let user = basicAuth(req)
 
         if(user != null) {
@@ -53,13 +53,13 @@ export default class Subscriber {
         return false
     }
 
-    dismiss() {
+    dismiss(): void {
         console.log('subscriber', this.uuid, 'disconnected')
         this.broker.subscribers = this.broker.subscribers.filter(obj => obj !== this);
         return this.ws.terminate()
     }
 
-    heartbeat() {
+    heartbeat(): void {
         this.lifetime--
 
         if(! this.isAlive()) {
