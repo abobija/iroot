@@ -3,7 +3,7 @@ import basicAuth from 'basic-auth'
 import WebSocket from 'ws'
 import http from 'http'
 import events from 'events'
-import Request from './request'
+import Message from './message'
 
 const lifetimeThreshold = 10 // sec
 const lifeTimePingSendSecond = Math.ceil(lifetimeThreshold / 3)
@@ -26,10 +26,10 @@ export default class Subscriber extends events.EventEmitter {
         ws.on('message', data => {
             self.refreshLifetime()
             
-            let pl = Request.parse(data.toString())
+            let msg = Message.parse(data.toString())
 
-            if(pl != null) {
-                this.emit('request', pl)
+            if(msg != null) {
+                this.emit('message', msg)
             }
         })
     }

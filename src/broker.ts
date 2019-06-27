@@ -2,7 +2,7 @@ import Subscriber from './subscriber'
 import WebSocket from 'ws'
 import http from 'http'
 import Channel from './channel'
-import Request from './request'
+import Message from './message'
 
 export default class Broker {
     private wss: WebSocket.Server
@@ -30,9 +30,9 @@ export default class Broker {
 
         this.mainChannel.subscribe(subscriber)
 
-        subscriber.on('request', (req: Request) => {
-            console.log(`request from subscriber ${subscriber.uuid}`)
-            console.log(req)
+        subscriber.on('message', (msg: Message) => {
+            console.log(`message from subscriber ${subscriber.uuid}`)
+            console.log(msg)
         })
 
         subscriber.on('dismiss', () => {
@@ -48,7 +48,7 @@ export default class Broker {
         }
     }
 
-    getChannelByPath(path: String): Channel | null {
+    protected getChannelByPath(path: String): Channel | null {
         for(let i in this.channels) {
             if(this.channels[i].path === path) {
                 return this.channels[i]
