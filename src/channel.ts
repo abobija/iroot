@@ -8,9 +8,15 @@ export default class Channel {
         this.path = path
     }
 
+    hasSubscriber(subscriber: Subscriber): boolean {
+        return this.subscribers.indexOf(subscriber) != -1
+    }
+
     subscribe(subscriber: Subscriber): Channel {
         subscriber.on('dismiss', () => this.unsubscribe(subscriber))
         this.subscribers.push(subscriber)
+
+        subscriber.emit('subscribed', this)
 
         return this
     }

@@ -7,7 +7,7 @@ Server for IoT devices
 | --- | --- | --- |
 | `type` | Enum(`subscribe`, `publish`) | **Yes** |
 | `channel` | String | **Yes** |
-| `topic` | String | No |
+| `topic` | String | Yes if `publish` |
 | `data` | String | No |
 
 ### Example 1
