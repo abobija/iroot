@@ -5,8 +5,8 @@ import Channel from './channel';
 
 export default class Broker {
     private wss: WebSocket.Server
-    mainChannel:Channel = new Channel('/main')
-    private channels:Channel[] = [ this.mainChannel ]
+    mainChannel: Channel
+    private channels: Channel[]
 
     private _subscribers:Subscriber[] = []
 
@@ -14,10 +14,13 @@ export default class Broker {
         this.wss = new WebSocket.Server({ server })
         this.wss.on('connection', (ws, req) => this.onConnection(ws, req))
 
+        this.mainChannel = new Channel('/main')
+        this.channels = [ this.mainChannel ]
+
         this.heartbeats()
     }
     
-    onConnection(ws: WebSocket, req: http.IncomingMessage): void {
+    protected onConnection(ws: WebSocket, req: http.IncomingMessage): void {
         let subscriber = new Subscriber(ws)
         this._subscribers.push(subscriber)
 
@@ -39,7 +42,7 @@ export default class Broker {
         }
     }
 
-    heartbeats(): void {
+    private heartbeats(): void {
         setInterval(
             () => this._subscribers.forEach(subscriber => subscriber.heartbeat()),
             1000

@@ -2,7 +2,7 @@ import Subscriber from "./subscriber";
 
 export default class Channel {
     path: string
-    private subscribers:Subscriber[] = []
+    private subscribers: Subscriber[] = []
 
     constructor(path: string) {
         this.path = path
