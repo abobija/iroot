@@ -1,7 +1,10 @@
 import Subscriber from "./subscriber"
+import { jsonIgnore } from 'json-ignore'
 
 export default class Channel {
     path: string
+    
+    @jsonIgnore()
     private subscribers: Subscriber[] = []
 
     constructor(path: string) {

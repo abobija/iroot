@@ -80,6 +80,10 @@ export default class Broker {
         return null
     }
 
+    getChannels(): Channel[] {
+        return this.channels
+    }
+
     private heartbeats(): void {
         setInterval(
             () => this._subscribers.forEach(subscriber => subscriber.heartbeat()),
