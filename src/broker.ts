@@ -3,7 +3,7 @@ import WebSocket from 'ws'
 import http from 'http'
 
 export default class Broker {
-    wss: WebSocket.Server
+    private wss: WebSocket.Server
     subscribers:Subscriber[] = []
 
     constructor(server: http.Server) {

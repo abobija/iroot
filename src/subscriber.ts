@@ -8,9 +8,9 @@ const lifetimeThreshold = 10 // sec
 const lifeTimePingSendSecond = Math.ceil(lifetimeThreshold / 3)
 
 export default class Subscriber {
-    lifetime: number = 0
-    broker: Broker
-    ws: WebSocket
+    private lifetime: number = 0
+    private broker: Broker
+    private ws: WebSocket
     uuid: string
 
     constructor(broker: Broker, ws: WebSocket) {
