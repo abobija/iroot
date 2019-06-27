@@ -33,6 +33,8 @@ export default class Broker {
         subscriber.on('message', (msg: Message) => {
             console.log(`message from subscriber ${subscriber.uuid}`)
             console.log(msg)
+
+            this.processMessageFromSubscriber(msg, subscriber)
         })
 
         subscriber.on('dismiss', () => {
@@ -46,6 +48,10 @@ export default class Broker {
             console.log(`subscriber ${subscriber.uuid} not authorized`)
             subscriber.dismiss()
         }
+    }
+
+    protected processMessageFromSubscriber(message: Message, subscriber: Subscriber): void {
+        
     }
 
     protected getChannelByPath(path: String): Channel | null {

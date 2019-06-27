@@ -1,4 +1,7 @@
 export default class Message {
+    static Subscribe: string = 'subscribe'
+    static Publish: string = 'publish'
+
     type: string
     channel: string
     topic?: string
@@ -11,17 +14,23 @@ export default class Message {
         this.data = data
     }
 
-    static isTypeValid(type: string): boolean {
-        return type === 'subscribe' || type === 'publish'
+    isSubscribe(): boolean {
+        return this.type === Message.Subscribe
     }
 
-    static parse(plain: string): Message | null {
+    isPublish(): boolean {
+        return this.type === Message.Publish
+    }
+
+    isValid(): boolean {
+        return this.isSubscribe() || this.isPublish()
+    }
+
+    static fromJSON(json: string): Message | null {
         try {
-            var json = JSON.parse(plain)
+            var raw = JSON.parse(json)
             
-            if(Message.isTypeValid(json.type) && typeof(json.channel) === 'string') {
-                return new Message(json.type, json.channel, json.topic, json.data)
-            }
+            return new Message(raw.type, raw.channel, raw.topic, raw.data)
         }
         catch(_) {}
 

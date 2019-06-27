@@ -26,9 +26,9 @@ export default class Subscriber extends events.EventEmitter {
         ws.on('message', data => {
             self.refreshLifetime()
             
-            let msg = Message.parse(data.toString())
+            let msg = Message.fromJSON(data.toString())
 
-            if(msg != null) {
+            if(msg != null && msg.isValid()) {
                 this.emit('message', msg)
             }
         })

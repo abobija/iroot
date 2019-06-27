@@ -1,12 +1,13 @@
 # iroot
 Server for IoT devices
 
-## Payload structure
+## Message structure
 
 | Name | Type | Mandatory |
 | --- | --- | --- |
-| `action` | Enum(`subscribe`, `publish`) | **Yes** |
+| `type` | Enum(`subscribe`, `publish`) | **Yes** |
 | `channel` | String | **Yes** |
+| `topic` | String | No |
 | `data` | String | No |
 
 ### Example 1
@@ -15,7 +16,7 @@ Subscribing to channel
 
 ```json
 {
-    "action": "subscribe",
+    "type": "subscribe",
     "channel": "/home/livingroom/light4"
 }
 ```
@@ -26,8 +27,9 @@ Publishing to channel
 
 ```json
 {
-    "action": "publish",
+    "type": "publish",
     "channel": "/home/bedroom/light1",
-    "data": "ON"
+    "topic": "state",
+    "data": "on"
 }
 ```
