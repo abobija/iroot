@@ -3,19 +3,20 @@ import basicAuth from 'basic-auth'
 import Broker from './broker'
 import WebSocket from 'ws'
 import http from 'http'
+import events from 'events'
 
 const lifetimeThreshold = 10 // sec
 const lifeTimePingSendSecond = Math.ceil(lifetimeThreshold / 3)
 
-export default class Subscriber {
-    private lifetime: number = 0
-    private broker: Broker
-    private ws: WebSocket
+export default class Subscriber extends events.EventEmitter {
     uuid: string
+    private lifetime: number = 0
+    private ws: WebSocket
 
-    constructor(broker: Broker, ws: WebSocket) {
+    constructor(ws: WebSocket) {
+        super()
+
         let self = this
-        this.broker = broker
         this.ws = ws
         this.uuid = uuidv4()
         this.refreshLifetime()
@@ -28,8 +29,6 @@ export default class Subscriber {
             console.log('received from subscriber', self.uuid, ':', msg)
             //ws.send(msg)
         })
-
-        console.log('subscriber', this.uuid, 'connected')
     }
 
     refreshLifetime(): void {
@@ -54,8 +53,7 @@ export default class Subscriber {
     }
 
     dismiss(): void {
-        console.log('subscriber', this.uuid, 'disconnected')
-        this.broker.subscribers = this.broker.subscribers.filter(obj => obj !== this);
+        this.emit('dismiss')
         return this.ws.terminate()
     }
 
@@ -63,7 +61,8 @@ export default class Subscriber {
         this.lifetime--
 
         if(! this.isAlive()) {
-            return this.dismiss()
+            this.dismiss()
+            return
         }
         
         if(this.lifetime == lifeTimePingSendSecond) {
