@@ -2,7 +2,7 @@ import Subscriber from './subscriber'
 import WebSocket from 'ws'
 import http from 'http'
 import Channel from './channel';
-import Message from './message';
+import Payload from './payload';
 
 export default class Broker {
     private wss: WebSocket.Server
@@ -30,8 +30,9 @@ export default class Broker {
 
         this.mainChannel.subscribe(subscriber)
 
-        subscriber.on('message', (message: Message) => {
-            console.log(`subscriber ${subscriber.uuid} sends ${message.data} to ${message.channel} channel`)
+        subscriber.on('payload', (pl: Payload) => {
+            console.log(`payload from subscriber ${subscriber.uuid}`)
+            console.log(pl)
         })
 
         subscriber.on('dismiss', () => {
@@ -45,6 +46,16 @@ export default class Broker {
             console.log(`subscriber ${subscriber.uuid} not authorized`)
             subscriber.dismiss()
         }
+    }
+
+    getChannelByPath(path: String): Channel | null {
+        for(let i in this.channels) {
+            if(this.channels[i].path === path) {
+                return this.channels[i]
+            }
+        }
+
+        return null
     }
 
     private heartbeats(): void {
