@@ -61,17 +61,17 @@ export default class Broker {
     }
 
     protected deviceAuthorized(device: Device, req: http.IncomingMessage): boolean {
-        let user = basicAuth(req)
+        let credentials = basicAuth(req)
 
-        if(user != null) {
-            if(this.getDeviceByName(user.name)) {
-                console.log(`Device with name "${user.name}" has been already connected`)
+        if(credentials != null) {
+            if(this.getDeviceByName(credentials.name)) {
+                console.log(`Device with name "${credentials.name}" has been already connected`)
                 return false
             }
 
             // TODO: Fetch user from db
-            if(user.name === 'dev32' && user.pass === 'test1234') {
-                device.name = user.name
+            if(credentials.name === 'dev32' && credentials.pass === 'test1234') {
+                device.name = credentials.name
                 return true
             }
         }
