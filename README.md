@@ -1,6 +1,13 @@
 # iroot
 Server for IoT devices
 
+## Usage
+
+```
+npm i
+npm start
+```
+
 ## Message structure
 
 | Name | Type | Mandatory |
