@@ -2,9 +2,9 @@
   "name": "iot-srv",
   "version": "1.0.0",
   "description": "Server for IoT devices",
-  "main": "index.js",
+  "main": "app.js",
   "scripts": {
-    "start": "tsc && node dist/main.js"
+    "start": "tsc && node dist/app.js"
   },
   "repository": {
     "type": "git",
