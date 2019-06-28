@@ -24,7 +24,7 @@ export default class Broker {
     
     protected onConnection(ws: WebSocket, req: http.IncomingMessage): void {
         let dev = new Device(ws)
-        this._devices.push(dev)
+        this.addDevice(dev)
 
         console.log(`device ${dev.uuid} connected`)
 
@@ -44,7 +44,7 @@ export default class Broker {
         })
         
         dev.events.on('dismiss', () => {
-            this._devices = this._devices.filter(d => d !== dev)
+            this.removeDevice(dev)
 
             console.log(`device ${dev.uuid} dismissed`)
             console.log(`total devices ${this._devices.length}`)
@@ -120,7 +120,19 @@ export default class Broker {
         return this
     }
 
-    protected getDeviceByName(name: string): Device | null {
+    getDevices(): Device[] {
+        return this._devices
+    }
+
+    private addDevice(device: Device): void {
+        this._devices.push(device)
+    }
+
+    private removeDevice(device: Device): void {
+        this._devices = this._devices.filter(dev => dev !== device)
+    }
+
+    getDeviceByName(name: string): Device | null {
         for(let i in this._devices) {
             if(this._devices[i].name === name) {
                 return this._devices[i]
