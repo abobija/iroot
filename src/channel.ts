@@ -4,6 +4,7 @@ import { jsonIgnore } from 'json-ignore'
 export default class Channel {
     id: number
     path: string
+    subscribersLength: number = 0
     
     @jsonIgnore()
     private subscribers: Subscriber[] = []
@@ -19,17 +20,22 @@ export default class Channel {
 
     subscribe(subscriber: Subscriber): Channel {
         subscriber.events.on('dismiss', () => this.unsubscribe(subscriber))
-        this.subscribers.push(subscriber)
 
+        this.subscribers.push(subscriber)
+        this.subscribersLength++
         subscriber.events.emit('subscribed', this)
 
         return this
     }
 
     unsubscribe(subscriber: Subscriber): Channel {
-        this.subscribers = this.subscribers.filter(s => s !== subscriber)
-        
-        subscriber.events.emit('unsubscribed', this)
+        let index = this.subscribers.indexOf(subscriber)
+
+        if(index != -1) {
+            this.subscribers.splice(index, 1)
+            this.subscribersLength--
+            subscriber.events.emit('unsubscribed', this)
+        }
 
         return this
     }
