@@ -38,8 +38,6 @@ Publishing to channel
 
 ### Routes
 
-:point_right: All routes starts with `/api`
-
-- `GET /channels`
-- `GET /channel/:channelId`
-- `GET /channel/:channelId/subscribers`
+- `GET /api/channels`
+- `GET /api/channel/:channelId`
+- `GET /api/channel/:channelId/subscribers`
