@@ -1,6 +1,6 @@
 import express from 'express'
 import Broker from '../model/broker'
-import channelRoute from './api/channel'
+import channelsRoute from './api/channels'
 
 export default (broker: Broker): express.Router => express.Router()
-    .use(channelRoute(broker))
+    .use(channelsRoute(broker))
