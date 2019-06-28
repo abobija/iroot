@@ -39,5 +39,7 @@ Publishing to channel
 ### Routes
 
 - `GET /api/channels`
-- `GET /api/channel/:channelId`
-- `GET /api/channel/:channelId/subscribers`
+- `GET /api/channel/:id`
+- `GET /api/channel/:id/subscribers`
+- `GET /api/devices`
+- `GET /api/device/:id`
