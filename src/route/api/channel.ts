@@ -6,14 +6,7 @@ export default (broker: Broker): express.Router  => express.Router()
         res.json(broker.getChannels())
     })
     .get('/channel/:channelId', (req, res) => {
-        let channel = broker.getChannelById(parseInt(req.params.channelId))
-
-        if(channel == null) {
-            res.status(404).end()
-        }
-        else {
-            res.json(channel)
-        }
+        res.json(broker.getChannelById(parseInt(req.params.channelId)))
     })
     .get('/channel/:channelId/subscribers', (req, res) => {
         let channel = broker.getChannelById(parseInt(req.params.channelId))
