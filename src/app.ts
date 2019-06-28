@@ -13,7 +13,9 @@ app.disable('etag')
 app.set('json replacer', jsonIgnoreReplacer)
 app.set('json spaces', 2)
 
-app.use('/dashboard', express.static(path.join(__dirname, '../dashboard')))
 app.use('/api', api(broker))
+app.use('/dashboard', express.static(path.join(__dirname, '../dashboard')))
+app.use('/static/bootstrap', express.static(path.join(__dirname, '../node_modules/bootstrap/dist')))
+app.use('/static/jquery', express.static(path.join(__dirname, '../node_modules/jquery/dist')))
 
 server.listen(8080, () => console.log('Server has been started.'))

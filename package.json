@@ -24,7 +24,9 @@
   "homepage": "https://github.com/abobija/iot-srv#readme",
   "dependencies": {
     "basic-auth": "^2.0.1",
+    "bootstrap": "^4.3.1",
     "express": "^4.17.1",
+    "jquery": "^3.4.1",
     "json-ignore": "^0.4.0",
     "uuid": "^3.3.2",
     "ws": "^7.0.1"
