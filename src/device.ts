@@ -9,7 +9,7 @@ import { jsonIgnore } from 'json-ignore';
 const lifetimeThreshold = 10 // sec
 const lifeTimePingSendSecond = Math.ceil(lifetimeThreshold / 3)
 
-export default class Subscriber {
+export default class Device {
     uuid: string
 
     @jsonIgnore() private lifetime: number = 0
