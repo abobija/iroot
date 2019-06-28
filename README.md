@@ -33,3 +33,13 @@ Publishing to channel
     "data": "on"
 }
 ```
+
+## Api
+
+### Routes
+
+:point_right: All routes starts with `/api`
+
+- `GET /channels`
+- `GET /channel/:channelId`
+- `GET /channel/:channelId/subscribers`
