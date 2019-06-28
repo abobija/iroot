@@ -1,7 +1,5 @@
 import uuidv4 from 'uuid/v4'
-import basicAuth from 'basic-auth'
 import WebSocket from 'ws'
-import http from 'http'
 import events from 'events'
 import Message from './message'
 import { jsonIgnore } from 'json-ignore';
@@ -11,6 +9,7 @@ const lifeTimePingSendSecond = Math.ceil(lifetimeThreshold / 3)
 
 export default class Device {
     uuid: string
+    username?: string
 
     @jsonIgnore() private lifetime: number = 0
     @jsonIgnore() private ws: WebSocket
@@ -41,19 +40,6 @@ export default class Device {
 
     private isAlive(): boolean {
         return this.lifetime >= 0
-    }
-
-    isAuthorized(req: http.IncomingMessage): boolean {
-        let user = basicAuth(req)
-
-        if(user != null) {
-            // TODO: Fetch user from db
-            if(user.name === 'dev32' && user.pass === 'test1234') {
-                return true
-            }
-        }
-
-        return false
     }
 
     dismiss(): void {

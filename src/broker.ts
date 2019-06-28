@@ -3,6 +3,7 @@ import WebSocket from 'ws'
 import http from 'http'
 import Channel from './channel'
 import Message from './message'
+import basicAuth from 'basic-auth'
 
 export default class Broker {
     private wss: WebSocket.Server
@@ -52,10 +53,24 @@ export default class Broker {
             console.log(`total devices ${this._devices.length}`)
         })
 
-        if(! dev.isAuthorized(req)) {
+        if(! this.deviceAuthorized(dev, req)) {
             console.log(`device ${dev.uuid} not authorized`)
             dev.dismiss()
         }
+    }
+
+    protected deviceAuthorized(device: Device, req: http.IncomingMessage): boolean {
+        let user = basicAuth(req)
+
+        if(user != null) {
+            // TODO: Fetch user from db
+            if(user.name === 'dev32' && user.pass === 'test1234') {
+                device.username = user.name
+                return true
+            }
+        }
+
+        return false
     }
 
     protected processMessageFromDevice(message: Message, device: Device): void {
