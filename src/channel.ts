@@ -18,10 +18,10 @@ export default class Channel {
     }
 
     subscribe(subscriber: Subscriber): Channel {
-        subscriber.on('dismiss', () => this.unsubscribe(subscriber))
+        subscriber.events.on('dismiss', () => this.unsubscribe(subscriber))
         this.subscribers.push(subscriber)
 
-        subscriber.emit('subscribed', this)
+        subscriber.events.emit('subscribed', this)
 
         return this
     }
@@ -29,7 +29,7 @@ export default class Channel {
     unsubscribe(subscriber: Subscriber): Channel {
         this.subscribers = this.subscribers.filter(s => s !== subscriber)
         
-        subscriber.emit('unsubscribed', this)
+        subscriber.events.emit('unsubscribed', this)
 
         return this
     }

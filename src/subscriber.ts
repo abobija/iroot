@@ -9,15 +9,14 @@ import { jsonIgnore } from 'json-ignore';
 const lifetimeThreshold = 10 // sec
 const lifeTimePingSendSecond = Math.ceil(lifetimeThreshold / 3)
 
-export default class Subscriber extends events.EventEmitter {
+export default class Subscriber {
     uuid: string
 
     @jsonIgnore() private lifetime: number = 0
     @jsonIgnore() private ws: WebSocket
+    @jsonIgnore() events: events.EventEmitter = new events.EventEmitter()
 
     constructor(ws: WebSocket) {
-        super()
-
         let self = this
         this.ws = ws
         this.uuid = uuidv4()
@@ -31,7 +30,7 @@ export default class Subscriber extends events.EventEmitter {
             let msg = Message.fromJSON(data.toString())
 
             if(msg != null && msg.isValid()) {
-                this.emit('message', msg)
+                this.events.emit('message', msg)
             }
         })
     }
@@ -58,7 +57,7 @@ export default class Subscriber extends events.EventEmitter {
     }
 
     dismiss(): void {
-        this.emit('dismiss')
+        this.events.emit('dismiss')
         return this.ws.terminate()
     }
 

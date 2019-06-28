@@ -30,22 +30,22 @@ export default class Broker {
 
         this.mainChannel.subscribe(subscriber)
 
-        subscriber.on('message', (msg: Message) => {
+        subscriber.events.on('message', (msg: Message) => {
             console.log(`message from subscriber ${subscriber.uuid}`)
             console.log(msg)
 
             this.processMessageFromSubscriber(msg, subscriber)
         })
 
-        subscriber.on('subscribed', (channel: Channel) => {
+        subscriber.events.on('subscribed', (channel: Channel) => {
             console.log(`subscriber ${subscriber.uuid} subscribed to channel ${channel.path}`)
         })
 
-        subscriber.on('unsubscribed', (channel: Channel) => {
+        subscriber.events.on('unsubscribed', (channel: Channel) => {
             console.log(`subscriber ${subscriber.uuid} unsubscribed from channel ${channel.path}`)
         })
         
-        subscriber.on('dismiss', () => {
+        subscriber.events.on('dismiss', () => {
             this._subscribers = this._subscribers.filter(s => s !== subscriber)
 
             console.log(`subscriber ${subscriber.uuid} dismissed`)
