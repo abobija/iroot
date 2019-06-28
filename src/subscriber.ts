@@ -4,14 +4,16 @@ import WebSocket from 'ws'
 import http from 'http'
 import events from 'events'
 import Message from './message'
+import { jsonIgnore } from 'json-ignore';
 
 const lifetimeThreshold = 10 // sec
 const lifeTimePingSendSecond = Math.ceil(lifetimeThreshold / 3)
 
 export default class Subscriber extends events.EventEmitter {
     uuid: string
-    private lifetime: number = 0
-    private ws: WebSocket
+
+    @jsonIgnore() private lifetime: number = 0
+    @jsonIgnore() private ws: WebSocket
 
     constructor(ws: WebSocket) {
         super()

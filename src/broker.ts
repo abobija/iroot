@@ -15,7 +15,7 @@ export default class Broker {
         this.wss = new WebSocket.Server({ server })
         this.wss.on('connection', (ws, req) => this.onConnection(ws, req))
 
-        this.mainChannel = new Channel('/main')
+        this.mainChannel = new Channel(0, '/main')
         this.channels = [ this.mainChannel ]
 
         this.heartbeats()
@@ -82,6 +82,16 @@ export default class Broker {
 
     getChannels(): Channel[] {
         return this.channels
+    }
+
+    getChannelById(id: number): Channel | null {
+        for(let i in this.channels) {
+            if(this.channels[i].id === id) {
+                return this.channels[i]
+            }
+        }
+
+        return null
     }
 
     private heartbeats(): void {

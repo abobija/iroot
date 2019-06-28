@@ -2,12 +2,14 @@ import Subscriber from "./subscriber"
 import { jsonIgnore } from 'json-ignore'
 
 export default class Channel {
+    id: number
     path: string
     
     @jsonIgnore()
     private subscribers: Subscriber[] = []
 
-    constructor(path: string) {
+    constructor(id: number, path: string) {
+        this.id = id
         this.path = path
     }
 
@@ -30,5 +32,9 @@ export default class Channel {
         subscriber.emit('unsubscribed', this)
 
         return this
+    }
+
+    getSubscribers(): Subscriber[] {
+        return this.subscribers
     }
 }
