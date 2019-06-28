@@ -9,7 +9,7 @@ const lifeTimePingSendSecond = Math.ceil(lifetimeThreshold / 3)
 
 export default class Device {
     uuid: string
-    username?: string
+    name?: string
 
     @jsonIgnore() private lifetime: number = 0
     @jsonIgnore() private ws: WebSocket

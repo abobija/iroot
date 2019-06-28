@@ -65,7 +65,7 @@ export default class Broker {
         if(user != null) {
             // TODO: Fetch user from db
             if(user.name === 'dev32' && user.pass === 'test1234') {
-                device.username = user.name
+                device.name = user.name
                 return true
             }
         }
