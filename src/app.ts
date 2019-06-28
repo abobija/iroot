@@ -1,7 +1,7 @@
 import express from 'express'
 import http from 'http'
 import Broker from './model/broker'
-import api from './api'
+import api from './route/api'
 import { jsonIgnoreReplacer } from 'json-ignore'
 
 const app = express()

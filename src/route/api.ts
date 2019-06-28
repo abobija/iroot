@@ -1,5 +1,5 @@
 import express from 'express'
-import Broker from './model/broker'
+import Broker from '../model/broker'
 
 export default function api(broker: Broker): express.Router {
     return express.Router()
