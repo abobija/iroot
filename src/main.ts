@@ -1,6 +1,6 @@
 import express from 'express'
 import http from 'http'
-import Broker from './broker'
+import Broker from './model/broker'
 import api from './api'
 import { jsonIgnoreReplacer } from 'json-ignore'
 
