@@ -27,9 +27,6 @@ export default class Broker {
         this._devices.push(dev)
 
         console.log(`device ${dev.uuid} connected`)
-        console.log(`total devices ${this._devices.length}`)
-
-        this.mainChannel.subscribe(dev)
 
         dev.events.on('message', (msg: Message) => {
             console.log(`message from device ${dev.uuid}`)
@@ -57,12 +54,21 @@ export default class Broker {
             console.log(`device ${dev.uuid} not authorized`)
             dev.dismiss()
         }
+        else {
+            this.mainChannel.subscribe(dev)
+            console.log(`total devices ${this._devices.length}`)
+        }
     }
 
     protected deviceAuthorized(device: Device, req: http.IncomingMessage): boolean {
         let user = basicAuth(req)
 
         if(user != null) {
+            if(this.getDeviceByName(user.name)) {
+                console.log(`Device with name "${user.name}" has been already connected`)
+                return false
+            }
+
             // TODO: Fetch user from db
             if(user.name === 'dev32' && user.pass === 'test1234') {
                 device.name = user.name
@@ -112,5 +118,15 @@ export default class Broker {
     addChannel(channel: Channel): Broker {
         this.channels.push(channel)
         return this
+    }
+
+    protected getDeviceByName(name: string): Device | null {
+        for(let i in this._devices) {
+            if(this._devices[i].name === name) {
+                return this._devices[i]
+            }
+        }
+
+        return null
     }
 }
