@@ -9,6 +9,10 @@ npm i
 npm start
 ```
 
+## Devices / Clients
+
+- [ESP32](https://github.com/abobija/iroot-dev)
+
 ## Message structure
 
 | Name | Type | Mandatory |
