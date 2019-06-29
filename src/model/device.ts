@@ -34,17 +34,24 @@ export default class Device {
         })
     }
 
+    send(message: Message): void {
+        if(message == null || ! message.isValid()) {
+            throw Error('Invalid message')
+        }
+        
+        if(! message.isPublish()) {
+            throw Error('Message need to be publish type')
+        }
+
+        this.ws.send(JSON.stringify(message))
+    }
+
     private refreshLifetime(): void {
         this.lifetime = lifetimeThreshold
     }
 
     private isAlive(): boolean {
         return this.lifetime >= 0
-    }
-
-    dismiss(): void {
-        this.events.emit('dismiss')
-        return this.ws.terminate()
     }
 
     heartbeat(): void {
@@ -58,5 +65,10 @@ export default class Device {
         if(this.lifetime == lifeTimePingSendSecond) {
             this.ws.ping(() => {})
         }
+    }
+
+    dismiss(): void {
+        this.events.emit('dismiss')
+        return this.ws.terminate()
     }
 }

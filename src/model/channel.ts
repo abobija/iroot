@@ -1,5 +1,6 @@
 import Device from "./device"
 import { jsonIgnore } from 'json-ignore'
+import Message from "./message";
 
 export default class Channel {
     id: number
@@ -42,5 +43,9 @@ export default class Channel {
 
     getSubscribers(): Device[] {
         return this.subscribers
+    }
+
+    broadcast(message: Message): void {
+        this.subscribers.forEach(subscriber => subscriber.send(message))
     }
 }

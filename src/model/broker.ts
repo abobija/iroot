@@ -141,4 +141,14 @@ export default class Broker {
 
         return null
     }
+    
+    publishMessage(message: Message): void {
+        let channel = this.getChannelByPath(message.channel)
+
+        if(channel == null) {
+            throw Error(`Channel "${message.channel}" does not exist`)
+        }
+
+        channel.broadcast(message)
+    }
 }

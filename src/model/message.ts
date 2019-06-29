@@ -23,17 +23,18 @@ export default class Message {
     }
 
     isValid(): boolean {
-        return this.isSubscribe() || (this.isPublish() && typeof(this.topic) === 'string')
+        return this.isSubscribe() || (
+                this.isPublish() 
+                && typeof(this.topic) === 'string'
+                && typeof(this.data) === 'string'
+            )
     }
 
     static fromJSON(json: string): Message | null {
-        try {
-            var raw = JSON.parse(json)
+        return Message.fromObject(JSON.parse(json))
+    }
 
-            return new Message(raw.type, raw.channel, raw.topic, raw.data)
-        }
-        catch(_) {}
-
-        return null
+    static fromObject(obj: any): Message | null {
+        return new Message(obj.type, obj.channel, obj.topic, obj.data)
     }
 }
