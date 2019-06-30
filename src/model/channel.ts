@@ -45,7 +45,9 @@ export default class Channel {
         return this.subscribers
     }
 
-    broadcast(message: Message): void {
+    broadcast(message: Message): number {
         this.subscribers.forEach(subscriber => subscriber.send(message))
+        
+        return this.subscribersCount
     }
 }
