@@ -69,9 +69,9 @@ export default class Broker {
                 console.log(`Device with name "${credentials.name}" has been already connected`)
                 return false
             }
-
+            
             // TODO: Fetch user from db
-            if(credentials.name === 'dev32' && credentials.pass === 'test1234') {
+            if(['dev32', 'dev32-led'].indexOf(credentials.name) != -1 && credentials.pass === 'test1234') {
                 device.name = credentials.name
                 return true
             }
@@ -81,14 +81,19 @@ export default class Broker {
     }
 
     protected processMessageFromDevice(message: Message, device: Device): void {
-        if(message.isSubscribe()) {
-            let channel = this.getChannelByPath(message.channel)
-
-            if(channel != null && ! channel.hasSubscriber(device)) {
-                channel.subscribe(device)
+        try {
+            if(message.isSubscribe()) {
+                let channel = this.getChannelByPath(message.channel)
+    
+                if(channel != null && ! channel.hasSubscriber(device)) {
+                    channel.subscribe(device)
+                }
+            } else if(message.isPublish()) {
+                this.publishMessageFromDevice(device, message)
             }
-        } else if(message.isPublish()) {
-            // TODO: Implement publish mechanism
+        }
+        catch(err) {
+            console.error(err)
         }
     }
 
@@ -151,5 +156,15 @@ export default class Broker {
         }
 
         return channel.broadcast(message)
+    }
+
+    publishMessageFromDevice(device: Device, message: Message): number {
+        let channel = this.getChannelByPath(message.channel)
+
+        if(channel == null) {
+            throw Error(`Channel "${message.channel}" does not exist`)
+        }
+
+        return channel.subscriberBroadcast(device, message)
     }
 }

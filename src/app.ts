@@ -4,10 +4,13 @@ import Broker from './model/broker'
 import api from './route/api'
 import path from 'path'
 import { jsonIgnoreReplacer } from 'json-ignore'
+import Channel from './model/channel';
 
 const app = express()
 const server = http.createServer(app)
 const broker = new Broker(server)
+
+broker.addChannel(new Channel(1, '/home/room/led'))
 
 app.use(express.json())
 app.set('json replacer', jsonIgnoreReplacer)
@@ -15,6 +18,7 @@ app.set('json spaces', 2)
 app.disable('etag')
 
 app.use('/api', api(broker))
+
 app.get('/dashboard', (_req, res) => res.sendFile(path.join(__dirname, '../static/dashboard.html')))
 app.use('/static', express.static(path.join(__dirname, '../static')))
 app.use('/lib/bootstrap', express.static(path.join(__dirname, '../node_modules/bootstrap/dist')))

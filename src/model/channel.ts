@@ -50,4 +50,19 @@ export default class Channel {
         
         return this.subscribersCount
     }
+
+    subscriberBroadcast(subscriber: Device, message: Message): number {
+        if(! this.hasSubscriber(subscriber)) {
+            throw Error(`device ${subscriber.name} is not subscribed to "${this.path}" channel so they cannot broadcast`)
+        }
+
+        this.subscribers.forEach(s => {
+            if(s !== subscriber) {
+                console.log(`${subscriber.name} broadcast message to ${s.name}`)
+                s.send(message)
+            }
+        })
+
+        return this.subscribersCount - 1
+    }
 }
