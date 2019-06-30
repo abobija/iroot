@@ -16,6 +16,7 @@ export default class Broker {
         this.wss = new WebSocket.Server({ server })
         this.wss.on('connection', (ws, req) => this.onConnection(ws, req))
 
+        // All devices will be automatically subscribed to main channel
         this.addChannel(this.mainChannel = new Channel(0, '/main'))
 
         // Heartbeats...
@@ -87,7 +88,7 @@ export default class Broker {
                 channel.subscribe(device)
             }
         } else if(message.isPublish()) {
-
+            // TODO: Implement publish mechanism
         }
     }
 
