@@ -11,7 +11,7 @@ export default class Broker {
     private wss: WebSocket.Server
     mainChannel: Channel
     private channels: Channel[]
-    
+
     private _devices:Device[] = []
 
     constructor(server: http.Server, db: IRootDatabase) {
@@ -27,8 +27,6 @@ export default class Broker {
 
         // Heartbeats...
         setInterval(() => this._devices.forEach(dev => dev.heartbeat()), 1000)
-
-        console.log(this.channels)
     }
     
     protected onConnection(ws: WebSocket, req: http.IncomingMessage): void {
