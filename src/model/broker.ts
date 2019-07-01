@@ -3,7 +3,7 @@ import WebSocket from 'ws'
 import http from 'http'
 import Channel from './channel'
 import Message from './message'
-import basicAuth from 'basic-auth'
+import DeviceController, { DeviceAuthorizeResult } from '../controller/device.ctrl';
 
 export default class Broker {
     private wss: WebSocket.Server
@@ -51,33 +51,22 @@ export default class Broker {
             console.log(`total devices ${this._devices.length}`)
         })
 
-        if(! this.deviceAuthorized(dev, req)) {
-            console.log(`device ${dev.uuid} not authorized`)
+        let auth = new DeviceController(this).authorize(dev, req)
+
+        if(auth != DeviceAuthorizeResult.AUTHORIZED) {
+            if(auth == DeviceAuthorizeResult.ALREADY_CONNECTED) {
+                console.log(`device with same name has been already connected so they cannot be authorized`)
+            }
+            else if(auth == DeviceAuthorizeResult.INVALID_CREDENTIALS) {
+                console.log(`device not authorized. invalid credentials`)
+            }
+
             dev.dismiss()
         }
         else {
             this.mainChannel.subscribe(dev)
             console.log(`total devices ${this._devices.length}`)
         }
-    }
-
-    protected deviceAuthorized(device: Device, req: http.IncomingMessage): boolean {
-        let credentials = basicAuth(req)
-
-        if(credentials != null) {
-            if(this.getDeviceByName(credentials.name)) {
-                console.log(`Device with name "${credentials.name}" has been already connected`)
-                return false
-            }
-            
-            // TODO: Fetch user from db
-            if(['dev32', 'dev32-led'].indexOf(credentials.name) != -1 && credentials.pass === 'test1234') {
-                device.name = credentials.name
-                return true
-            }
-        }
-
-        return false
     }
 
     protected processMessageFromDevice(message: Message, device: Device): void {
