@@ -89,7 +89,7 @@ export default class Broker {
         return null
     }
     
-    publishMessage(message: Message): number {
+    publish(message: Message): number {
         let channel = this.getChannelByPath(message.channel)
 
         if(channel == null) {

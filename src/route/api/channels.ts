@@ -26,6 +26,6 @@ export default (broker: Broker): express.Router  => express.Router()
             throw Error("Invalid message")
         }
         else{
-            res.json(broker.publishMessage(msg))
+            res.json(broker.publish(msg))
         }
     })

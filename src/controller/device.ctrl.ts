@@ -80,7 +80,7 @@ export default class DeviceController {
                     channel.subscribe(device)
                 }
             } else if(message.isPublish()) {
-                this.publishMessage(device, message)
+                this.publish(device, message)
             }
         }
         catch(err) {
@@ -88,7 +88,7 @@ export default class DeviceController {
         }
     }
 
-    protected publishMessage(device: Device, message: Message): number {
+    protected publish(device: Device, message: Message): number {
         let channel = this.broker.getChannelByPath(message.channel)
 
         if(channel == null) {
