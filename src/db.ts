@@ -3,6 +3,7 @@ import fs from 'fs'
 import Channel from './model/channel';
 
 export default class IRootDatabase {
+    static MainChannelPath: string = '/main'
     private path: string 
     
     constructor(path: string) {
@@ -29,6 +30,8 @@ export default class IRootDatabase {
 
     loadChannels() {
         let result: Channel[] = []
+        
+        result.push(new Channel(0, IRootDatabase.MainChannelPath))
 
         let id = 1
         this.load('channels').forEach(raw => result.push(new Channel(id++, raw.path)))

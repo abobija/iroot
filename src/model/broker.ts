@@ -3,13 +3,12 @@ import WebSocket from 'ws'
 import http from 'http'
 import Channel from './channel'
 import Message from './message'
-import DeviceController from '../controller/device.ctrl';
-import IRootDatabase from '../db';
+import DeviceController from '../controller/device.ctrl'
+import IRootDatabase from '../db'
 
 export default class Broker {
     private db: IRootDatabase
     private wss: WebSocket.Server
-    mainChannel: Channel
     private channels: Channel[]
 
     private _devices:Device[] = []
@@ -18,9 +17,6 @@ export default class Broker {
         this.db = db
 
         this.channels = this.db.loadChannels()
-        
-        // All devices will be automatically subscribed to main channel
-        this.addChannel(this.mainChannel = new Channel(0, '/main'))
 
         this.wss = new WebSocket.Server({ server })
         this.wss.on('connection', (ws, req) => this.onConnection(ws, req))
@@ -38,6 +34,10 @@ export default class Broker {
         }
     }
 
+    getMainChannel(): Channel {
+        return this.getChannelByPath(IRootDatabase.MainChannelPath)!
+    }
+    
     getChannelByPath(path: String): Channel | null {
         for(let i in this.channels) {
             if(this.channels[i].path === path) {

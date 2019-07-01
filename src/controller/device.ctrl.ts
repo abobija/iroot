@@ -1,10 +1,10 @@
-import Broker from "../model/broker";
+import Broker from "../model/broker"
 import http from 'http'
-import Device from "../model/device";
+import Device from "../model/device"
 import basicAuth from 'basic-auth'
 import WebSocket from 'ws'
-import Message from "../model/message";
-import Channel from "../model/channel";
+import Message from "../model/message"
+import Channel from "../model/channel"
 
 enum DeviceAuthorizeResult {
     AUTHORIZED,
@@ -31,10 +31,7 @@ export default class DeviceController {
                 throw Error(`Device not authorized. Invalid credentials`)
             }
         }
-
-        this.broker.addDevice(dev)
-        this.broker.mainChannel.subscribe(dev)
-
+        
         dev.events.on('message', (msg: Message) => {
             console.log(`Message from device ${dev.uuid}`)
             console.log(msg)
@@ -51,6 +48,9 @@ export default class DeviceController {
         })
         
         dev.events.on('dismiss', () => this.broker.removeDevice(dev))
+
+        this.broker.addDevice(dev)
+        this.broker.getMainChannel().subscribe(dev)
     }
 
     protected authorize(device: Device, req: http.IncomingMessage): DeviceAuthorizeResult {
