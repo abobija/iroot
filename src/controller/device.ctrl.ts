@@ -25,10 +25,10 @@ export default class DeviceController {
 
         if(auth != DeviceAuthorizeResult.AUTHORIZED) {
             if(auth == DeviceAuthorizeResult.ALREADY_CONNECTED) {
-                throw Error(`device with same name has been already connected so they cannot be authorized`)
+                throw Error(`Device with same name has been already connected so they cannot be authorized`)
             }
             else if(auth == DeviceAuthorizeResult.INVALID_CREDENTIALS) {
-                throw Error(`device not authorized. invalid credentials`)
+                throw Error(`Device not authorized. Invalid credentials`)
             }
         }
 
@@ -36,18 +36,18 @@ export default class DeviceController {
         this.broker.mainChannel.subscribe(dev)
 
         dev.events.on('message', (msg: Message) => {
-            console.log(`message from device ${dev.uuid}`)
+            console.log(`Message from device ${dev.uuid}`)
             console.log(msg)
 
             this.processMessageFromDevice(msg, dev)
         })
 
         dev.events.on('subscribed', (channel: Channel) => {
-            console.log(`device ${dev.uuid} subscribed to channel ${channel.path}`)
+            console.log(`Device ${dev.uuid} subscribed to channel ${channel.path}`)
         })
 
         dev.events.on('unsubscribed', (channel: Channel) => {
-            console.log(`device ${dev.uuid} unsubscribed from channel ${channel.path}`)
+            console.log(`Device ${dev.uuid} unsubscribed from channel ${channel.path}`)
         })
         
         dev.events.on('dismiss', () => this.broker.removeDevice(dev))
@@ -87,7 +87,7 @@ export default class DeviceController {
             console.error(err)
         }
     }
-    
+
     protected publishMessage(device: Device, message: Message): number {
         let channel = this.broker.getChannelByPath(message.channel)
 

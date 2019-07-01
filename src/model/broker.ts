@@ -68,15 +68,15 @@ export default class Broker {
     addDevice(device: Device): void {
         this._devices.push(device)
         
-        console.log(`device ${device.uuid} added`)
-        console.log(`total devices ${this._devices.length}`)
+        console.log(`Device ${device.uuid} added`)
+        console.log(`Total devices ${this._devices.length}`)
     }
 
     removeDevice(device: Device): void {
         this._devices = this._devices.filter(dev => dev !== device)
         
-        console.log(`device ${device.uuid} removed`)
-        console.log(`total devices ${this._devices.length}`)
+        console.log(`Device ${device.uuid} removed`)
+        console.log(`Total devices ${this._devices.length}`)
     }
 
     getDeviceByName(name: string): Device | null {
