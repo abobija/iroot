@@ -68,3 +68,33 @@ Dashboard is located at `/dashboard` path.
     ```
 - `GET /api/devices`
 - `GET /api/device/:id`
+
+## DB files examples
+
+:point_right: Database folder `/db` and all files will be auto-generated at application startup.
+
+- _`channels.json`_
+    ```json
+    [
+        {
+            "path": "/home/room/led"
+        },
+        {
+            "path": "/gsm"
+        }
+    ]
+    ```
+
+- _`credentials.json`_
+    ```json
+    [
+        {
+            "uid": "dev32",
+            "pwd": "test1234"
+        },
+        {
+            "uid": "dev32-led",
+            "pwd": "test1234"
+        }
+    ]
+    ```
