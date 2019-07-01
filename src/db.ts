@@ -12,6 +12,10 @@ export default class IRootDatabase {
     static MainChannelPath: string = '/main'
     private path: string 
     
+    // Channels can be loaded only once per instance
+    // This flag will hold load status
+    private channelsLoaded: boolean = false
+
     constructor(path: string) {
         this.path = path
         
@@ -35,6 +39,12 @@ export default class IRootDatabase {
     }
 
     channels(): Channel[] {
+        if(this.channelsLoaded) {
+            throw Error('Channels has been already loaded. They can be loaded only once per DB instance')
+        }
+
+        this.channelsLoaded = true
+
         let result: Channel[] = []
 
         result.push(new Channel(0, IRootDatabase.MainChannelPath))
