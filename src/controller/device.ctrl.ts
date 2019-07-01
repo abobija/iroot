@@ -2,8 +2,11 @@ import Broker from "../model/broker";
 import http from 'http'
 import Device from "../model/device";
 import basicAuth from 'basic-auth'
+import WebSocket from 'ws'
+import Message from "../model/message";
+import Channel from "../model/channel";
 
-export enum DeviceAuthorizeResult {
+enum DeviceAuthorizeResult {
     AUTHORIZED,
     INVALID_CREDENTIALS,
     ALREADY_CONNECTED
@@ -16,7 +19,41 @@ export default class DeviceController {
         this.broker = broker
     }
 
-    authorize(device: Device, req: http.IncomingMessage): DeviceAuthorizeResult {
+    handleDeviceConnection(ws: WebSocket, req: http.IncomingMessage): void {
+        let dev = new Device(ws)
+        let auth = this.authorize(dev, req)
+
+        if(auth != DeviceAuthorizeResult.AUTHORIZED) {
+            if(auth == DeviceAuthorizeResult.ALREADY_CONNECTED) {
+                throw Error(`device with same name has been already connected so they cannot be authorized`)
+            }
+            else if(auth == DeviceAuthorizeResult.INVALID_CREDENTIALS) {
+                throw Error(`device not authorized. invalid credentials`)
+            }
+        }
+
+        this.broker.addDevice(dev)
+        this.broker.mainChannel.subscribe(dev)
+
+        dev.events.on('message', (msg: Message) => {
+            console.log(`message from device ${dev.uuid}`)
+            console.log(msg)
+
+            this.processMessageFromDevice(msg, dev)
+        })
+
+        dev.events.on('subscribed', (channel: Channel) => {
+            console.log(`device ${dev.uuid} subscribed to channel ${channel.path}`)
+        })
+
+        dev.events.on('unsubscribed', (channel: Channel) => {
+            console.log(`device ${dev.uuid} unsubscribed from channel ${channel.path}`)
+        })
+        
+        dev.events.on('dismiss', () => this.broker.removeDevice(dev))
+    }
+
+    protected authorize(device: Device, req: http.IncomingMessage): DeviceAuthorizeResult {
         let credentials = basicAuth(req)
 
         if(credentials != null) {
@@ -32,5 +69,32 @@ export default class DeviceController {
         }
 
         return DeviceAuthorizeResult.INVALID_CREDENTIALS
+    }
+
+    protected processMessageFromDevice(message: Message, device: Device): void {
+        try {
+            if(message.isSubscribe()) {
+                let channel = this.broker.getChannelByPath(message.channel)
+
+                if(channel != null && ! channel.hasSubscriber(device)) {
+                    channel.subscribe(device)
+                }
+            } else if(message.isPublish()) {
+                this.publishMessage(device, message)
+            }
+        }
+        catch(err) {
+            console.error(err)
+        }
+    }
+    
+    protected publishMessage(device: Device, message: Message): number {
+        let channel = this.broker.getChannelByPath(message.channel)
+
+        if(channel == null) {
+            throw Error(`Channel "${message.channel}" does not exist`)
+        }
+
+        return channel.subscriberBroadcast(device, message)
     }
 }
