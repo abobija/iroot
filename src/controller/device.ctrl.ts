@@ -61,9 +61,9 @@ export default class DeviceController {
                 return DeviceAuthorizeResult.ALREADY_CONNECTED
             }
 
-            if(this.broker.getDb().credentials().some(c => c.uid == auth!.name && c.pwd == auth!.pass)) {
+            if(this.broker.credentials().some(c => c.uid == auth!.name && c.pwd == auth!.pass)) {
                 device.name = auth.name
-                
+
                 return DeviceAuthorizeResult.AUTHORIZED
             }
         }

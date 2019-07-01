@@ -5,6 +5,7 @@ import Channel from './channel'
 import Message from './message'
 import DeviceController from '../controller/device.ctrl'
 import IRootDatabase from '../db'
+import Credentials from './credentials';
 
 export default class Broker {
     private db: IRootDatabase
@@ -105,7 +106,7 @@ export default class Broker {
         return channel.broadcast(message)
     }
 
-    getDb(): IRootDatabase {
-        return this.db
+    credentials(): Credentials[] {
+        return this.db.credentials()
     }
 }
