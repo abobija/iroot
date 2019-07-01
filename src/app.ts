@@ -4,13 +4,12 @@ import Broker from './model/broker'
 import api from './route/api'
 import path from 'path'
 import { jsonIgnoreReplacer } from 'json-ignore'
-import Channel from './model/channel';
+import IRootDatabase from './db'
 
 const app = express()
 const server = http.createServer(app)
-const broker = new Broker(server)
-
-broker.addChannel(new Channel(1, '/home/room/led'))
+const db = new IRootDatabase(path.join(__dirname, '../db'))
+const broker = new Broker(server, db)
 
 app.use(express.json())
 app.set('json replacer', jsonIgnoreReplacer)

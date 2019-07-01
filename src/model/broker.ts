@@ -4,23 +4,31 @@ import http from 'http'
 import Channel from './channel'
 import Message from './message'
 import DeviceController from '../controller/device.ctrl';
+import IRootDatabase from '../db';
 
 export default class Broker {
+    private db: IRootDatabase
     private wss: WebSocket.Server
     mainChannel: Channel
-    private channels: Channel[] = []
-
+    private channels: Channel[]
+    
     private _devices:Device[] = []
 
-    constructor(server: http.Server) {
-        this.wss = new WebSocket.Server({ server })
-        this.wss.on('connection', (ws, req) => this.onConnection(ws, req))
+    constructor(server: http.Server, db: IRootDatabase) {
+        this.db = db
 
+        this.channels = this.db.loadChannels()
+        
         // All devices will be automatically subscribed to main channel
         this.addChannel(this.mainChannel = new Channel(0, '/main'))
 
+        this.wss = new WebSocket.Server({ server })
+        this.wss.on('connection', (ws, req) => this.onConnection(ws, req))
+
         // Heartbeats...
         setInterval(() => this._devices.forEach(dev => dev.heartbeat()), 1000)
+
+        console.log(this.channels)
     }
     
     protected onConnection(ws: WebSocket, req: http.IncomingMessage): void {
