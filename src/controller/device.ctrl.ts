@@ -31,7 +31,7 @@ export default class DeviceController {
                 throw Error(`Device not authorized. Invalid credentials`)
             }
         }
-        
+
         dev.events.on('message', (msg: Message) => {
             console.log(`Message from device ${dev.uuid}`)
             console.log(msg)
@@ -54,16 +54,16 @@ export default class DeviceController {
     }
 
     protected authorize(device: Device, req: http.IncomingMessage): DeviceAuthorizeResult {
-        let credentials = basicAuth(req)
+        let auth = basicAuth(req)
 
-        if(credentials != null) {
-            if(this.broker.getDeviceByName(credentials.name)) {
+        if(auth != null) {
+            if(this.broker.getDeviceByName(auth.name)) {
                 return DeviceAuthorizeResult.ALREADY_CONNECTED
             }
-            
-            // TODO: Fetch user from db
-            if(['dev32', 'dev32-led'].indexOf(credentials.name) != -1 && credentials.pass === 'test1234') {
-                device.name = credentials.name
+
+            if(this.broker.getDb().credentials().some(c => c.uid == auth!.name && c.pwd == auth!.pass)) {
+                device.name = auth.name
+                
                 return DeviceAuthorizeResult.AUTHORIZED
             }
         }

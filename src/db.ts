@@ -1,6 +1,12 @@
 import path from 'path'
 import fs from 'fs'
-import Channel from './model/channel';
+import Channel from './model/channel'
+import Credentials from './model/credentials'
+
+enum Files {
+    Channels = 'channels',
+    Credentials = 'credentials'
+}
 
 export default class IRootDatabase {
     static MainChannelPath: string = '/main'
@@ -17,7 +23,7 @@ export default class IRootDatabase {
             fs.mkdirSync(this.path)
         }
 
-        ['channels'].forEach(filenameWithoutExtension => {
+        [Files.Channels, Files.Credentials].forEach(filenameWithoutExtension => {
             let filename = path.join(this.path, `${filenameWithoutExtension}.json`)
 
             if(! fs.existsSync(filename)) {
@@ -28,13 +34,21 @@ export default class IRootDatabase {
         return this
     }
 
-    loadChannels() {
+    channels(): Channel[] {
         let result: Channel[] = []
-        
+
         result.push(new Channel(0, IRootDatabase.MainChannelPath))
 
         let id = 1
-        this.load('channels').forEach(raw => result.push(new Channel(id++, raw.path)))
+        this.load(Files.Channels).forEach(raw => result.push(new Channel(id++, raw.path)))
+
+        return result
+    }
+
+    credentials(): Credentials[] {
+        let result: Credentials[] = []
+
+        this.load(Files.Credentials).forEach(raw => result.push(Credentials.fromJSON(raw)))
 
         return result
     }

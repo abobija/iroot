@@ -16,7 +16,7 @@ export default class Broker {
     constructor(server: http.Server, db: IRootDatabase) {
         this.db = db
 
-        this.channels = this.db.loadChannels()
+        this.channels = this.db.channels()
 
         this.wss = new WebSocket.Server({ server })
         this.wss.on('connection', (ws, req) => this.onConnection(ws, req))
@@ -37,7 +37,7 @@ export default class Broker {
     getMainChannel(): Channel {
         return this.getChannelByPath(IRootDatabase.MainChannelPath)!
     }
-    
+
     getChannelByPath(path: String): Channel | null {
         for(let i in this.channels) {
             if(this.channels[i].path === path) {
@@ -103,5 +103,9 @@ export default class Broker {
         }
 
         return channel.broadcast(message)
+    }
+
+    getDb(): IRootDatabase {
+        return this.db
     }
 }
