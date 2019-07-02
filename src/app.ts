@@ -18,9 +18,4 @@ app.disable('etag')
 
 app.use('/api', api(broker))
 
-app.get('/dashboard', (_req, res) => res.sendFile(path.join(__dirname, '../static/dashboard.html')))
-app.use('/static', express.static(path.join(__dirname, '../static')))
-app.use('/lib/bootstrap', express.static(path.join(__dirname, '../node_modules/bootstrap/dist')))
-app.use('/lib/jquery', express.static(path.join(__dirname, '../node_modules/jquery/dist')))
-
 server.listen(8080, () => console.log('Server has been started.'))

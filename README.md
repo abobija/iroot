@@ -45,10 +45,6 @@ Publishing to channel
 }
 ```
 
-## Dashboard
-
-Dashboard is located at `/dashboard` path.
-
 ## Api Routes
 
 - `GET /api/channels`
