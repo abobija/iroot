@@ -4,7 +4,7 @@ import Message from '../../model/message';
 
 export default (broker: Broker): express.Router  => express.Router()
     .get('/channels', (req, res) => {
-        res.json(broker.getChannels())
+        res.json(broker.channels)
     })
     .get('/channel/:id', (req, res) => {
         res.json(broker.getChannelById(parseInt(req.params.id)))

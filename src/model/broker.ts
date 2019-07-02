@@ -10,14 +10,14 @@ import Credentials from './credentials';
 export default class Broker {
     private db: IRootDatabase
     private wss: WebSocket.Server
-    private channels: Channel[]
+    private _channels: Channel[]
 
     private _devices:Device[] = []
 
     constructor(server: http.Server, db: IRootDatabase) {
         this.db = db
 
-        this.channels = this.db.channels()
+        this._channels = this.db.channels()
 
         this.wss = new WebSocket.Server({ server })
         this.wss.on('connection', (ws, req) => this.onConnection(ws, req))
@@ -35,36 +35,24 @@ export default class Broker {
         }
     }
 
-    getMainChannel(): Channel {
-        return this.getChannelByPath(IRootDatabase.MainChannelPath)!
-    }
-
     getChannelByPath(path: String): Channel | null {
-        for(let i in this.channels) {
-            if(this.channels[i].path === path) {
-                return this.channels[i]
+        for(let i in this._channels) {
+            if(this._channels[i].path === path) {
+                return this._channels[i]
             }
         }
 
         return null
-    }
-
-    getChannels(): Channel[] {
-        return this.channels
     }
 
     getChannelById(id: number): Channel | null {
-        for(let i in this.channels) {
-            if(this.channels[i].id === id) {
-                return this.channels[i]
+        for(let i in this._channels) {
+            if(this._channels[i].id === id) {
+                return this._channels[i]
             }
         }
 
         return null
-    }
-
-    getDevices(): Device[] {
-        return this._devices
     }
 
     addDevice(device: Device): void {
@@ -103,5 +91,17 @@ export default class Broker {
 
     credentials(): Credentials[] {
         return this.db.credentials()
+    }
+
+    get mainChannel(): Channel {
+        return this.getChannelByPath(IRootDatabase.MainChannelPath)!
+    }
+
+    get channels(): Channel[] {
+        return this._channels
+    }
+
+    get devices(): Device[] {
+        return this._devices
     }
 }

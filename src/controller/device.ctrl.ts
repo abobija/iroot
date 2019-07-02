@@ -50,7 +50,7 @@ export default class DeviceController {
         dev.events.on('dismiss', () => this.broker.removeDevice(dev))
 
         this.broker.addDevice(dev)
-        this.broker.getMainChannel().subscribe(dev)
+        this.broker.mainChannel.subscribe(dev)
     }
 
     protected authorize(device: Device, req: http.IncomingMessage): DeviceAuthorizeResult {
