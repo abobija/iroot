@@ -68,7 +68,7 @@ Dashboard is located at `/dashboard` path.
 - `GET /api/devices`
 - `GET /api/device/:id`
 
-## DB files examples
+## DB Files Examples
 
 :point_right: Database folder `/db` and all files will be auto-generated at application startup.
 
