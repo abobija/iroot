@@ -63,11 +63,6 @@ export default class Broker {
         return null
     }
 
-    addChannel(channel: Channel): Broker {
-        this.channels.push(channel)
-        return this
-    }
-
     getDevices(): Device[] {
         return this._devices
     }
