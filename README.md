@@ -4,7 +4,6 @@ Server for IoT devices
 ## Usage
 
 ```
-npm i -g typescript
 npm i
 npm start
 ```
