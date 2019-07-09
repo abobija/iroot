@@ -1,0 +1,15 @@
+[Unit]
+Description="iroot"
+
+[Service]
+ExecStart=/usr/bin/npm start
+WorkingDirectory=/usr/iroot
+Restart=always
+RestartSec=10
+StandardOutput=syslog
+StandardError=syslog
+SyslogIdentifier=iroot
+Environment=NODE_ENV=production PORT=8080
+
+[Install]
+WantedBy=multi-user.target
