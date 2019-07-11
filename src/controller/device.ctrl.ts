@@ -25,9 +25,11 @@ export default class DeviceController {
 
         if(auth != DeviceAuthorizeResult.AUTHORIZED) {
             if(auth == DeviceAuthorizeResult.ALREADY_CONNECTED) {
+                dev.dismiss()
                 throw Error(`Device with same name has been already connected so they cannot be authorized`)
             }
             else if(auth == DeviceAuthorizeResult.INVALID_CREDENTIALS) {
+                dev.dismiss()
                 throw Error(`Device not authorized. Invalid credentials`)
             }
         }
