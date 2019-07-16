@@ -1,6 +1,7 @@
 import Device from "./device"
 import { jsonIgnore } from 'json-ignore'
-import Message from "./message";
+import Message from "./message"
+import IRootError from "./irooterror";
 
 export default class Channel {
     id: number
@@ -53,7 +54,7 @@ export default class Channel {
 
     subscriberBroadcast(subscriber: Device, message: Message): number {
         if(! this.hasSubscriber(subscriber)) {
-            throw Error(`device ${subscriber.name} is not subscribed to "${this.path}" channel so they cannot broadcast`)
+            throw new IRootError(`device ${subscriber.name} is not subscribed to "${this.path}" channel so they cannot broadcast`)
         }
 
         this.subscribers.forEach(s => {

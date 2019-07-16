@@ -1,31 +1,37 @@
 import express from 'express'
-import Broker from "../../model/broker";
-import Message from '../../model/message';
+import Broker from "../../model/broker"
+import Message from '../../model/message'
+import Result, { NotFoundResult } from '../../model/result'
+import Joi from '@hapi/joi'
+import { celebrate } from 'celebrate'
+import IRootError from '../../model/irootError';
+
+const channelParamsValidator = celebrate({ params: { id: Joi.number().integer().min(0) } })
 
 export default (broker: Broker): express.Router  => express.Router()
     .get('/channels', (req, res) => {
-        res.json(broker.channels)
+        res.send(new Result(broker.channels))
     })
-    .get('/channel/:id', (req, res) => {
-        res.json(broker.getChannelById(parseInt(req.params.id)))
-    })
-    .get('/channel/:id/subscribers', (req, res) => {
-        let channel = broker.getChannelById(parseInt(req.params.id))
+    .get('/channel/:id', channelParamsValidator, (req, res) => {
+        const channel = broker.getChannelById(parseInt(req.params.id))
 
         if(channel == null) {
-            res.status(404).end()
+            return res.send(new NotFoundResult())
         }
-        else {
-            res.json(channel.getSubscribers())
-        }
-    })
-    .post('/channel/publish', (req, res) => {
-        let msg = Message.fromObject(req.body)
 
-        if(msg == null) {
-            throw Error("Invalid message")
+        res.send(new Result())
+    })
+    .get('/channel/:id/subscribers', channelParamsValidator, (req, res) => {
+        const channel = broker.getChannelById(parseInt(req.params.id))
+
+        if(channel == null) {
+            throw new IRootError(`Channel ${req.params.id} does not exist`, 404)
         }
-        else{
-            res.json(broker.publish(msg))
-        }
+        
+        res.send(new Result(channel.getSubscribers()))
+    })
+    .post('/channel/publish', celebrate({ body: Message.Schema }), (req, res) => { 
+        const count = broker.publish(Message.fromObject(req.body))
+        
+        res.send(new Result(count))
     })

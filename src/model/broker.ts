@@ -6,6 +6,7 @@ import Message from './message'
 import DeviceController from '../controller/device.ctrl'
 import IRootDatabase from '../db'
 import Credentials from './credentials';
+import IRootError from './irootError';
 
 export default class Broker {
     private db: IRootDatabase
@@ -83,7 +84,7 @@ export default class Broker {
         let channel = this.getChannelByPath(message.channel)
 
         if(channel == null) {
-            throw Error(`Channel "${message.channel}" does not exist`)
+            throw new IRootError(`Channel "${message.channel}" does not exist`)
         }
 
         return channel.broadcast(message)

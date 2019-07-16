@@ -5,6 +5,9 @@ import api from './route/api'
 import path from 'path'
 import { jsonIgnoreReplacer } from 'json-ignore'
 import IRootDatabase from './db'
+import { errors } from 'celebrate'
+import IRootError from './model/irootError'
+import { ErrorResult } from './model/result'
 
 const app = express()
 const server = http.createServer(app)
@@ -18,4 +21,14 @@ app.disable('etag')
 
 app.use('/api', api(broker))
 
-server.listen(8080, () => console.log('Server has been started.'))
+// Use celebrate error middleware
+app.use(errors())
+
+// Catch IRootError-s and wrap them up in ErrorResult class
+app.use((err: IRootError, _req: express.Request, res: express.Response, _next: express.NextFunction) => {
+    return res.status(err.statusCode).send(new ErrorResult(err.message, err.statusCode))
+})
+
+const port = process.env.PORT || 8080
+
+server.listen(port, () => console.log(`Server has been started at port :${port}.`))
