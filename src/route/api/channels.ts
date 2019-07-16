@@ -19,7 +19,7 @@ export default (broker: Broker): express.Router  => express.Router()
             return res.send(new NotFoundResult())
         }
 
-        res.send(new Result())
+        res.send(new Result(channel))
     })
     .get('/channel/:id/subscribers', channelParamsValidator, (req, res) => {
         const channel = broker.getChannelById(parseInt(req.params.id))
