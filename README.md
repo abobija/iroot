@@ -62,7 +62,7 @@ Publishing to channel
     }
     ```
 - `GET /api/devices`
-- `GET /api/device/:id`
+- `GET /api/device/:name`
 
 ## DB Files Examples
 
