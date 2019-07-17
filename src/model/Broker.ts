@@ -3,8 +3,8 @@ import WebSocket from 'ws'
 import http from 'http'
 import Channel from './Channel'
 import Message from './Message'
-import DeviceController from '../controller/device.ctrl'
-import IRootDatabase from '../db'
+import DeviceController from '../controller/DeviceController'
+import IRootDatabase from '../IRootDatabase'
 import Credentials from './Credentials';
 import IRootError from '../helpers/IRootError';
 
