@@ -6,7 +6,7 @@ import Message from './message'
 import DeviceController from '../controller/device.ctrl'
 import IRootDatabase from '../db'
 import Credentials from './credentials';
-import IRootError from './irootError';
+import IRootError from '../helpers/irootError';
 
 export default class Broker {
     private db: IRootDatabase

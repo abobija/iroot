@@ -6,8 +6,8 @@ import path from 'path'
 import { jsonIgnoreReplacer } from 'json-ignore'
 import IRootDatabase from './db'
 import { errors } from 'celebrate'
-import IRootError from './model/irootError'
-import { ErrorResult } from './model/result'
+import IRootError from './helpers/irootError'
+import { ErrorResult } from './helpers/result'
 
 const app = express()
 const server = http.createServer(app)
