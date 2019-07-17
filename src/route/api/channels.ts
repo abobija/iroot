@@ -6,7 +6,7 @@ import Joi from '@hapi/joi'
 import { celebrate } from 'celebrate'
 import IRootError from '../../helpers/IRootError';
 
-const channelParamsValidator = celebrate({ params: { id: Joi.number().integer().min(0) } })
+const channelParamsValidator = celebrate({ params: { id: Joi.number().integer().min(0).required() } })
 
 export default (broker: Broker): express.Router  => express.Router()
     .get('/channels', (req, res) => {
