@@ -29,6 +29,8 @@ app.use((err: IRootError, _req: express.Request, res: express.Response, _next: e
     return res.status(err.statusCode).send(new ErrorResult(err.message, err.statusCode))
 })
 
+// Get port from env or set it to default
 const port = process.env.PORT || 8080
 
+// Boot up the server
 server.listen(port, () => console.log(`Server has been started at port :${port}.`))
