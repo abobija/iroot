@@ -1,10 +1,10 @@
 import express from 'express'
-import Broker from "../../model/broker"
-import Message from '../../model/message'
-import Result, { NotFoundResult } from '../../helpers/result'
+import Broker from "../../model/Broker"
+import Message from '../../model/Message'
+import Result, { NotFoundResult } from '../../helpers/Result'
 import Joi from '@hapi/joi'
 import { celebrate } from 'celebrate'
-import IRootError from '../../helpers/irootError';
+import IRootError from '../../helpers/IRootError';
 
 const channelParamsValidator = celebrate({ params: { id: Joi.number().integer().min(0) } })
 

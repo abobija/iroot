@@ -1,5 +1,5 @@
 import express from 'express'
-import Broker from '../model/broker'
+import Broker from '../model/Broker'
 import channelsRoute from './api/channels'
 import devicesRoute from './api/devices'
 

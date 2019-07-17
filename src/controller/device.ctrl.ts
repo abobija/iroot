@@ -1,10 +1,10 @@
-import Broker from "../model/broker"
+import Broker from "../model/Broker"
 import http from 'http'
-import Device from "../model/device"
+import Device from "../model/Device"
 import basicAuth from 'basic-auth'
 import WebSocket from 'ws'
-import Message from "../model/message"
-import Channel from "../model/channel"
+import Message from "../model/Message"
+import Channel from "../model/Channel"
 
 enum DeviceAuthorizeResult {
     AUTHORIZED,

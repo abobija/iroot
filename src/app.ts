@@ -1,13 +1,13 @@
 import express from 'express'
 import http from 'http'
-import Broker from './model/broker'
+import Broker from './model/Broker'
 import api from './route/api'
 import path from 'path'
 import { jsonIgnoreReplacer } from 'json-ignore'
 import IRootDatabase from './db'
 import { errors } from 'celebrate'
-import IRootError from './helpers/irootError'
-import { ErrorResult } from './helpers/result'
+import IRootError from './helpers/IRootError'
+import { ErrorResult } from './helpers/Result'
 
 const app = express()
 const server = http.createServer(app)

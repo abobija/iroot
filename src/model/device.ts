@@ -1,7 +1,7 @@
 import uuidv4 from 'uuid/v4'
 import WebSocket from 'ws'
 import events from 'events'
-import Message from './message'
+import Message from './Message'
 import { jsonIgnore } from 'json-ignore';
 
 const lifetimeThreshold = 10 // sec

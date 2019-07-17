@@ -1,7 +1,7 @@
-import Device from "./device"
+import Device from "./Device"
 import { jsonIgnore } from 'json-ignore'
-import Message from "./message"
-import IRootError from "../helpers/irootError";
+import Message from "./Message"
+import IRootError from "../helpers/IRootError";
 
 export default class Channel {
     id: number

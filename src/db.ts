@@ -1,7 +1,7 @@
 import path from 'path'
 import fs from 'fs'
-import Channel from './model/channel'
-import Credentials from './model/credentials'
+import Channel from './model/Channel'
+import Credentials from './model/Credentials'
 
 enum Files {
     Channels = 'channels',

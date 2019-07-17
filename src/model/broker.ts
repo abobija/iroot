@@ -1,12 +1,12 @@
-import Device from './device'
+import Device from './Device'
 import WebSocket from 'ws'
 import http from 'http'
-import Channel from './channel'
-import Message from './message'
+import Channel from './Channel'
+import Message from './Message'
 import DeviceController from '../controller/device.ctrl'
 import IRootDatabase from '../db'
-import Credentials from './credentials';
-import IRootError from '../helpers/irootError';
+import Credentials from './Credentials';
+import IRootError from '../helpers/IRootError';
 
 export default class Broker {
     private db: IRootDatabase
