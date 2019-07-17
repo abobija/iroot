@@ -5,6 +5,7 @@ import basicAuth from 'basic-auth'
 import WebSocket from 'ws'
 import Message from "../model/Message"
 import Channel from "../model/Channel"
+import IRootError from "../helpers/IRootError";
 
 enum DeviceAuthorizeResult {
     AUTHORIZED,
@@ -26,11 +27,11 @@ export default class DeviceController {
         if(auth != DeviceAuthorizeResult.AUTHORIZED) {
             if(auth == DeviceAuthorizeResult.ALREADY_CONNECTED) {
                 dev.dismiss()
-                throw Error(`Device with same name has been already connected so they cannot be authorized`)
+                throw new IRootError(`Device with same name has been already connected so they cannot be authorized`)
             }
             else if(auth == DeviceAuthorizeResult.INVALID_CREDENTIALS) {
                 dev.dismiss()
-                throw Error(`Device not authorized. Invalid credentials`)
+                throw new IRootError(`Device not authorized. Invalid credentials`)
             }
         }
 
@@ -94,7 +95,7 @@ export default class DeviceController {
         let channel = this.broker.getChannelByPath(message.channel)
 
         if(channel == null) {
-            throw Error(`Channel "${message.channel}" does not exist`)
+            throw new IRootError(`Channel "${message.channel}" does not exist`)
         }
 
         return channel.subscriberBroadcast(device, message)

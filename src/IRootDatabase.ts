@@ -2,6 +2,7 @@ import path from 'path'
 import fs from 'fs'
 import Channel from './model/Channel'
 import Credentials from './model/Credentials'
+import IRootError from './helpers/IRootError';
 
 enum Files {
     Channels = 'channels',
@@ -40,7 +41,7 @@ export default class IRootDatabase {
 
     channels(): Channel[] {
         if(this.channelsLoaded) {
-            throw Error('Channels has been already loaded. They can be loaded only once per DB instance')
+            throw new IRootError('Channels has been already loaded. They can be loaded only once per DB instance')
         }
 
         this.channelsLoaded = true

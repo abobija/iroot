@@ -3,6 +3,7 @@ import WebSocket from 'ws'
 import events from 'events'
 import Message from './Message'
 import { jsonIgnore } from 'json-ignore';
+import IRootError from '../helpers/IRootError';
 
 const lifetimeThreshold = 10 // sec
 const lifeTimePingSendSecond = Math.ceil(lifetimeThreshold / 3)
@@ -36,11 +37,11 @@ export default class Device {
 
     send(message: Message): void {
         if(message == null || ! message.isValid()) {
-            throw Error('Invalid message')
+            throw new IRootError('Invalid message')
         }
         
         if(! message.isPublish()) {
-            throw Error('Message need to be publish type')
+            throw new IRootError('Message need to be publish type')
         }
 
         this.ws.send(JSON.stringify(message))
